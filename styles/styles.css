@@ -10,6 +10,8 @@
  * governing permissions and limitations under the License.
  */
 
+ @import url('https://cdn.jsdelivr.net/npm/fullcalendar@5.1.0/main.min.css');
+
  :root {
   /* colors */
   --link-color: #035fe6;

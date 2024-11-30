@@ -23,25 +23,25 @@ function googleTranslate() {
 googleTranslate();
 
 // Scripts for Full Calendar
-async function fc1() {
-  await loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js');
-}
+// async function fc1() {
+//   await loadScript('https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js');
+// }
 
-await fc1();
+// await fc1();
 
-async function fc2() {
-  const s2 = document.createElement('script');
-  s2.text = `
-        const calendarEl = document.getElementById('calendar')
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth'
-        })
-        calendar.render()
-  `;
-  (document.body || document.head).appendChild(s2);
-}
+// async function fc2() {
+//   const s2 = document.createElement('script');
+//   s2.text = `
+//           const calendarEl = document.getElementById('calendar')
+//           const calendar = new FullCalendar.Calendar(calendarEl, {
+//             initialView: 'dayGridMonth'
+//           })
+//           calendar.render()
+//     `;
+//   (document.body || document.head).appendChild(s2);
+// }
 
-fc2();
+// fc2();
 
 // Script for Accessibility Widget
 async function loadWidget() {

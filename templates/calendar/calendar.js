@@ -189,14 +189,31 @@ function popupEvent(url, startTime, endTime, backgroundColor, readMore) {
 function createEvents(eventsList) {
   eventsList.forEach((event) => {
     if (event.daysOfWeek.length > 0) {
+      // calendar.addEvent({
+      //   title: event.title,
+      //   allDay: false,
+      //   daysOfWeek: event.daysOfWeek,
+      //   startTime: event.startTime,
+      //   endTime: event.endTime,
+      //   startRecur: event.startRecur,
+      //   endRecur: event.endRecur,
+      //   url: event.url,
+      //   backgroundColor: event.backgroundColor,
+      //   classNames: event.classNames,
+      //   groupId: event.divisionid,
+      //   extendedProps: { readMore: event.readMore },
+      // });
       calendar.addEvent({
         title: event.title,
         allDay: false,
-        daysOfWeek: event.daysOfWeek,
-        startTime: event.startTime,
-        endTime: event.endTime,
-        startRecur: event.startRecur,
-        endRecur: event.endRecur,
+        rrule: {
+          freq: 'weekly',
+          byweekday: event.daysOfWeek.split(','),
+          dtstart: event.startRecur,
+          until: event.endRecur,
+        },
+        duration: '02:00',
+        exdate: ['2025-01-10T13:00:00', '2025-01-17T13:00:00'],
         url: event.url,
         backgroundColor: event.backgroundColor,
         classNames: event.classNames,
@@ -272,12 +289,28 @@ async function initializeCalendar() {
   events = createEventList(importedData, eventsList);
 }
 
+export function loadrrtofullcalendar() {
+  const scriptrrtofullcalendar = document.createElement('script');
+  scriptrrtofullcalendar.setAttribute('type', 'text/javascript');
+  scriptrrtofullcalendar.src = 'https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.15/index.global.min.js';
+  scriptrrtofullcalendar.addEventListener('load', initializeCalendar);
+  document.head.append(scriptrrtofullcalendar);
+}
+
 export function loadfullcalendar() {
   const scriptfullcalendar = document.createElement('script');
   scriptfullcalendar.setAttribute('type', 'text/javascript');
   scriptfullcalendar.src = 'https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js';
-  scriptfullcalendar.addEventListener('load', initializeCalendar);
+  scriptfullcalendar.addEventListener('load', loadrrtofullcalendar);
   document.head.append(scriptfullcalendar);
+}
+
+export function loadrrule() {
+  const scriptrrule = document.createElement('script');
+  scriptrrule.setAttribute('type', 'text/javascript');
+  scriptrrule.src = 'https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js';
+  scriptrrule.addEventListener('load', loadfullcalendar);
+  document.head.append(scriptrrule);
 }
 
 function filterEvents(divisionId) {
@@ -404,7 +437,8 @@ export default async function decorate(doc) {
   const calDiv = div({ id: 'calendar' });
   $calendarSection.append(calDiv);
   $main.append($calendarSection);
-  loadfullcalendar();
+  // loadfullcalendar();
+  loadrrule();
   createModal(doc);
   calendarList.querySelectorAll('.fc-calendar-list-item').forEach((divisionLi, _, parent) => {
     divisionLi.addEventListener('click', () => {

@@ -4,7 +4,7 @@ import {
 
 class Obj {
   // eslint-disable-next-line max-len
-  constructor(title, start, end, allDay, daysOfWeek, startTime, endTime, startRecur, endRecur, url, backgroundColor, classNames, readMore, divisionid) {
+  constructor(title, start, end, allDay, daysOfWeek, startTime, endTime, startRecur, endRecur, url, backgroundColor, classNames, readMore, divisionid, excludedDates) {
     this.title = title;
     this.start = start;
     this.end = end;
@@ -19,6 +19,7 @@ class Obj {
     this.classNames = classNames;
     this.readMore = readMore;
     this.divisionid = divisionid;
+    this.excludedDates = excludedDates;
   }
 }
 
@@ -213,7 +214,7 @@ function createEvents(eventsList) {
           until: event.endRecur,
         },
         duration: '02:00',
-        exdate: ['2025-01-10T13:00:00', '2025-01-17T13:00:00'],
+        exdate: event.excludedDates.split(','),
         url: event.url,
         backgroundColor: event.backgroundColor,
         classNames: event.classNames,

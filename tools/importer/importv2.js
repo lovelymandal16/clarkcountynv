@@ -33,25 +33,25 @@ const createMetadataBlock = (main, document) => {
   return meta;
 };
 
-function addBackDrop(document) {
-  document.querySelectorAll('div.default-content-wrapper h1').forEach((x) => {
-    const newThing = document.createElement('p');
-    newThing.innerText = 'Hey Meet How are you';
-    x.replaceWith(newThing);
-  });
-}
-
 export default {
-  transformDOM: ({ document }) => {
+  transform: ({ document }) => {
     const main = document.querySelector('main');
     createMetadataBlock(main, document);
-    addBackDrop(document);
+
+    const embedElements = document.querySelector('.embed');
 
     // final cleanup
     WebImporter.DOMUtils.remove(main, [
       '.disclaimer',
+      '.embed',
     ]);
 
-    return main;
+    return [{
+      element: main,
+      path: '/main',
+    }, {
+      element: embedElements,
+      path: '/embed',
+    }];
   },
 };

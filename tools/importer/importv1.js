@@ -33,6 +33,14 @@ const createMetadataBlock = (main, document) => {
   return meta;
 };
 
+function replaceH1(main) {
+  main.querySelectorAll('h1').forEach((x) => {
+    const newThing = document.createElement('p');
+    newThing.innerText = 'Hey Meet How are you';
+    x.replaceWith(newThing);
+  });
+}
+
 export default {
   preprocess: ({ params }) => {
     params.foundSomethingInPreprocessing = true;
@@ -42,6 +50,7 @@ export default {
 
     const main = document.querySelector('main');
     createMetadataBlock(main, document);
+    replaceH1(main);
 
     // final cleanup
     WebImporter.DOMUtils.remove(main, [

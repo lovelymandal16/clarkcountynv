@@ -34,7 +34,12 @@ const createMetadataBlock = (main, document) => {
 };
 
 export default {
-  transformDOM: ({ document }) => {
+  preprocess: ({ params }) => {
+    params.foundSomethingInPreprocessing = true;
+  },
+  transformDOM: ({ document, params }) => {
+    console.log(params.foundSomethingInPreprocessing);
+
     const main = document.querySelector('main');
     createMetadataBlock(main, document);
 

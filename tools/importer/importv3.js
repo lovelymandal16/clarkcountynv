@@ -37,7 +37,7 @@ export default {
   transform: ({ document, params }) => {
     const main = document.querySelector('main');
 
-    const listOfAllImages = [...main.querySelectorAll('img')].map((img) => img.src);
+    const listOfAllImages = [...document.querySelectorAll('img')].map((img) => img.src);
     const listOfAllMeta = [...document.querySelectorAll('meta')].map((meta) => {
       const name = meta.getAttribute('name') || meta.getAttribute('property');
       if (name) {
@@ -45,7 +45,7 @@ export default {
       }
       return null;
     }).filter((meta) => meta);
-    createMetadataBlock(main, document);
+    // createMetadataBlock(main, document);
 
     return [{
       element: main,

@@ -42,7 +42,7 @@ export default {
     console.log(params.foundSomethingInPreprocessing);
 
     const main = document.querySelector('main');
-    // createMetadataBlock(main, document);
+    createMetadataBlock(main, document);
 
     // final cleanup
     WebImporter.DOMUtils.remove(main, [

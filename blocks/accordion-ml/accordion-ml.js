@@ -19,6 +19,7 @@ class Accordion {
     this.grandParent = el.parentElement.parentElement.parentElement.parentElement;
     // Store the <div class="content"> element
     this.content = el.querySelector('.content');
+    console.log(this.content);
 
     // Store the animation object (so we can cancel it if needed)
     this.animation = null;

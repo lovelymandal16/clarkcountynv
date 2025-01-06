@@ -27,7 +27,9 @@ class Accordion {
     // Store if the element is expanding
     this.isExpanding = false;
     // Detect user clicks on the summary element
-    this.summary.addEventListener('click', (e) => this.onClick(e));
+    if (this.content) {
+      this.summary.addEventListener('click', (e) => this.onClick(e));
+    }
   }
 
   onClick(e) {
@@ -178,9 +180,9 @@ function decorateMobileView(mainUL) {
       if (event.target.open) {
         height.style.setProperty('--height', 'auto');
         const value = findLevel(event.target);
-        event.target.querySelector('ul').querySelectorAll(':scope > details').forEach((ele) => {
-          ele.querySelector('summary').classList.add(`itemcolor${value + 1}`);
-        });
+          event.target.querySelector('ul').querySelectorAll(':scope > details').forEach((ele) => {
+            ele.querySelector('summary').classList.add(`itemcolor${value + 1}`);
+          });
         details.parentElement.querySelectorAll('details').forEach((ele) => {
           if (ele !== event.target) {
             ele.removeAttribute('open');

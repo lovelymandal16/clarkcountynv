@@ -451,7 +451,8 @@ export default async function decorate(doc) {
   const calDiv = div({ id: 'calendar' });
   $calendarSection.append(calDiv);
   $main.append($calendarSection);
-  // loadrrule() is loaded after 3 seconds via the delayed.js script for improving page performance
+  // eslint-disable-next-line max-len
+  // Triggering Calendar via loadrrule() after 3 seconds, replaced via spinner for improving page performance
   setTimeout(() => {
     if (window.location.pathname.includes('/calendar')) {
       loadrrule();

@@ -452,6 +452,11 @@ export default async function decorate(doc) {
   $calendarSection.append(calDiv);
   $main.append($calendarSection);
   // loadrrule() is loaded after 3 seconds via the delayed.js script for improving page performance
+  setTimeout(() => {
+    if (window.location.pathname.includes('/calendar')) {
+      loadrrule();
+    }
+  }, 3000);
   createModal(doc);
   calendarList.querySelectorAll('.fc-calendar-list-item').forEach((divisionLi, _, parent) => {
     divisionLi.addEventListener('click', () => {

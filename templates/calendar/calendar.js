@@ -89,6 +89,7 @@ export async function fetchPlaceholders(prefix) {
           return {};
         })
         .then((json) => {
+          console.log(json);
           window.placeholders[prefix] = json;
           resolve(window.placeholders[prefix]);
         })
@@ -158,7 +159,7 @@ function popupEvent(url, startTime, endTime, backgroundColor, readMore) {
   modal.querySelector('.event-modal-time p').textContent = `${eventStartTime} - ${eventEndTime}`;
   modal.querySelector('iframe').src = url;
   modal.style.display = 'block';
-  if (readMore.length > 0) {
+  if (readMore.length > 1) {
     modal.querySelector('.event-modal-footer a').href = readMore;
     modal.querySelector('.event-modal-footer a').classList.remove('displayoff');
   } else {
@@ -198,19 +199,15 @@ function createEvents(eventsList) {
   let eventDuration = '';
   console.log(eventsList);
   eventsList.forEach((event) => {
-    if (event.daysOfWeek.length > 0) {
+    if (event.daysOfWeek.length > 1) {
+      console.log(event.duration);
       if (event.duration && event.duration.length > 0) {
         eventDuration = `${event.duration.split('T')[1]}`;
       } else {
         eventDuration = '01:00';
       }
-      if (event.excludeDates && event.excludeDates.length > 0) {
-        const actualexcludeDates = [];
-        // event.excludeDates.split(',').foreach((date) => {
-        //   actualexcludeDates.push(`${date}T${event.startTime}`);
-        // });
+      if (event.excludeDates && event.excludeDates.length > 1) {
         event.excludeDates = event.excludeDates.split(',').map((date) => `${date}T${event.startTime}`);
-        console.log(event.excludeDates);
         calendar.addEvent({
           title: event.title,
           allDay: false,
@@ -247,6 +244,7 @@ function createEvents(eventsList) {
         });
       }
     } else {
+      console.log(event);
       calendar.addEvent({
         title: event.title,
         start: event.start,

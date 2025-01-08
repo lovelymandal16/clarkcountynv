@@ -350,7 +350,8 @@ async function initializeCalendar() {
   const eventsList = [];
   calendarEl = document.getElementById('calendar');
   const normalizeCalendar = 'events';
-  importedData = [...importedData, ...placeholders[`${normalizeCalendar}`].data];
+  importedData = placeholders[`${normalizeCalendar}`].data;
+  console.log(importedData);
   createCalendar();
   const checkDivision = window.location.pathname.split('/');
   if (checkDivision[2] && checkDivision[2].length > 0) {
@@ -489,13 +490,15 @@ export default async function decorate(doc) {
         if (liele.classList.contains('active')) {
           const divisionId = liele.id;
           divisions.forEach((division) => {
-            if (division.id === parseInt(divisionId, 10)) {
+            if (division.id === divisionId) {
               liele.style.backgroundColor = division.color;
               liele.querySelector('.fc-calendar-list-button').style.backgroundColor = division.color;
               if (divisionId === '2') {
                 window.location.href = `https://${window.location.host}/calendar/${normalizeString(divisions[divisionId - 1].name)}/`;
                 getFeaturedEvents();
-              } else { filterEvents(divisionId); }
+              } else {
+                filterEvents(divisionId);
+              }
             }
           });
         } else {

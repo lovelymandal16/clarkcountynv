@@ -6,7 +6,7 @@ import { normalizeString } from '../../scripts/utils.js';
 
 class Obj {
   // eslint-disable-next-line max-len
-  constructor(title, start, end, allDay, daysOfWeek, startTime, endTime, startRecur, endRecur, url, backgroundColor, classNames, readMore, divisionid, excludeDates, duration) {
+  constructor(title, start, end, allDay, daysOfWeek, startTime, endTime, url, backgroundColor, classNames, readMore, divisionid, excludeDates, duration) {
     this.title = title;
     this.start = start;
     this.end = end;
@@ -14,8 +14,6 @@ class Obj {
     this.daysOfWeek = daysOfWeek;
     this.startTime = startTime;
     this.endTime = endTime;
-    this.startRecur = startRecur;
-    this.endRecur = endRecur;
     this.url = url;
     this.backgroundColor = backgroundColor;
     this.classNames = classNames;
@@ -198,10 +196,11 @@ function disableSpinner() {
 function createEvents(eventsList) {
   disableSpinner();
   let eventDuration = '';
+  console.log(eventsList);
   eventsList.forEach((event) => {
     if (event.daysOfWeek.length > 0) {
       if (event.duration && event.duration.length > 0) {
-        eventDuration = `${event.duration.split('-')[1]}`;
+        eventDuration = `${event.duration.split('T')[1]}`;
       } else {
         eventDuration = '01:00';
       }
@@ -211,8 +210,8 @@ function createEvents(eventsList) {
         rrule: {
           freq: 'weekly',
           byweekday: event.daysOfWeek.split(','),
-          dtstart: event.startRecur,
-          until: event.endRecur,
+          dtstart: event.start,
+          until: event.end,
         },
         duration: eventDuration,
         exdate: ['2025-01-10T13:00:00', '2025-01-17T13:00:00'],
@@ -239,11 +238,12 @@ function createEvents(eventsList) {
 }
 
 function createEventList(importedData, eventsList) {
+  console.log(importedData);
   importedData.forEach((event) => {
-    const startTime = event.startRecur.split('T')[1];
-    const endTime = event.endRecur.split('T')[1];
+    const startTime = event.start.split('T')[1];
+    const endTime = event.end.split('T')[1];
     const url = window.location.origin + event.path;
-    const eventObj = new Obj(event.title, event.start, event.end, event.allDay, event.daysOfWeek, startTime, endTime, event.startRecur, event.endRecur, url, event['division-color'], event.classNames, event.readMore, event.divisionid, event.excludeDates, event.duration);
+    const eventObj = new Obj(event.title, event.start, event.end, event.allDay, event.daysOfWeek, startTime, endTime, url, event['division-color'], event.classNames, event.readMore, event.divisionid, event.excludeDates, event.duration);
     eventsList.push(eventObj);
   });
   createEvents(eventsList);

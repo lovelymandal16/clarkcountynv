@@ -28,52 +28,8 @@ let calendar = null;
 let events = [];
 let calendarEl = null;
 
-// Array of divisions
 let divisions = [];
 let placeholders = [];
-// const divisions = [
-//   { name: 'Events', color: '#312222', id: 1 },
-//   { name: 'Featured Events', color: '#3787d8', id: 2 },
-//   { name: 'County Commissioners', color: '#3787d8', id: 3 },
-//   { name: 'County Commission District A', color: '#da80c1', id: 4 },
-//   { name: 'County Commission District B', color: '#c0a6dd', id: 5 },
-//   { name: 'County Commissioners District C', color: '#48e7e2', id: 6 },
-//   { name: 'County Commissioners District D', color: '#7ad295', id: 7 },
-//   { name: 'County Commissioners District E', color: '#d4dbb6', id: 8 },
-//   { name: 'County Commissioners District F', color: '#f9a97f', id: 9 },
-//   { name: 'County Commissioners District G', color: '#2619e4', id: 10 },
-//   { name: 'Goodsprings Citizens Advisory Committee', color: '#ff8600', id: 11 },
-//   { name: 'Laughlin TAB', color: '#37d84e', id: 12 },
-//   { name: 'Lone Mountain Citizens Advisory Council', color: '#7237d8', id: 13 },
-//   { name: 'Lower Kyle Canyon Citizens Advisory Committee', color: '#d837d2', id: 14 },
-//   { name: 'Moapa Town Advisory Board', color: '#9d484d', id: 15 },
-//   { name: 'Paradise Town Advisory Board', color: '#058089', id: 16 },
-//   { name: 'Spring Valley Town Advisory Board', color: '#3a9500', id: 17 },
-//   { name: 'Winchester Town Advisory Board', color: '#3c8c98', id: 18 },
-//   { name: 'Enterprise Town Advisory Board', color: '#d5cd70', id: 19 },
-//   { name: 'Moapa Valley Town Advisory Board', color: '#89b5bc', id: 20 },
-//   { name: 'Red Rock Citizens Advisory Committee', color: '#fe0000', id: 21 },
-//   { name: 'Searchlight Town Advisory Board', color: '#37d891', id: 22 },
-//   { name: 'Bunkerville Town Advisory Board', color: '#b4ada6', id: 23 },
-//   { name: 'Mount Charleston Town Advisory Board', color: '#f3bbea', id: 24 },
-//   { name: 'Sunrise Manor Town Advisory Board', color: '#dadd32', id: 25 },
-//   { name: 'Whitney Town Advisory Board', color: '#07caf7', id: 26 },
-//   { name: 'PC', color: '#047c6d', id: 27 },
-//   { name: 'BCC', color: '#9086d8', id: 28 },
-//   { name: 'Mountain Springs Citizens Advisory Council', color: '#6aa85a', id: 29 },
-//   { name: 'Indian Springs Town Advisory Board', color: '#069874', id: 30 },
-//   { name: 'Sandy Valley Citizens Advisory Council Meeting', color: '#51277c', id: 31 },
-//   { name: 'Wetlands Park', color: '#3787d8', id: 32 },
-//   { name: 'Working Group to Address Homelessness', color: '#3787d8', id: 33 },
-//   { name: 'County Manager', color: '#edf77f', id: 34 },
-//   { name: 'Parks & Recreation', color: '#ddc08f', id: 35 },
-//   { name: 'American Rescue Plan Act', color: '#3787d8', id: 36 },
-//   { name: 'Truancy Prevention Outreach Program', color: '#37d847', id: 37 },
-//   { name: 'CJCC', color: '#3787d8', id: 38 },
-//   { name: 'Mojave Max and DCP Outreach Events / Volunteer Opportunities', color: '#f26d1e', id: 39 },
-//   { name: 'Family Services', color: '#3787d8', id: 40 },
-//   { name: 'Independent Living', color: '#3787d8', id: 41 },
-// ];
 
 // Fetching events from individual calendar sheets
 export async function fetchPlaceholders(prefix) {
@@ -91,9 +47,8 @@ export async function fetchPlaceholders(prefix) {
           return {};
         })
         .then((json) => {
-          console.log(json);
-          window.placeholders[prefix] = json.default;
-          window.placeholders[divisions] = json.divisions;
+          window.placeholders.calendarevents = json.default;
+          window.placeholders.divisions = json.divisions;
           resolve(window.placeholders[prefix]);
         })
         .catch(() => {
@@ -104,7 +59,6 @@ export async function fetchPlaceholders(prefix) {
     });
   }
   await window.placeholders[`${TRANSLATION_KEY}-loaded`];
-  // return window.placeholders[`${TRANSLATION_KEY}`];
   return window.placeholders;
 }
 
@@ -134,7 +88,6 @@ function tConv24(time24) {
 }
 
 function popupEvent(url, startTime, endTime, backgroundColor, readMore) {
-  console.log(startTime);
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUNE',
     'JULY', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'];
   let eventDate = startTime.getDate();
@@ -202,10 +155,8 @@ function disableSpinner() {
 function createEvents(eventsList) {
   disableSpinner();
   let eventDuration = '';
-  console.log(eventsList);
   eventsList.forEach((event) => {
     if (event.daysOfWeek.length > 1) {
-      console.log(event.duration);
       if (event.duration && event.duration.length > 0) {
         eventDuration = `${event.duration.split('T')[1]}`;
       } else {
@@ -249,7 +200,6 @@ function createEvents(eventsList) {
         });
       }
     } else {
-      console.log(event);
       calendar.addEvent({
         title: event.title,
         start: event.start,
@@ -266,7 +216,6 @@ function createEvents(eventsList) {
 }
 
 function createEventList(importedData, eventsList) {
-  console.log(importedData);
   importedData.forEach((event) => {
     const startTime = event.start.split('T')[1];
     const endTime = event.end.split('T')[1];
@@ -349,9 +298,7 @@ async function initializeCalendar() {
   let importedData = [];
   const eventsList = [];
   calendarEl = document.getElementById('calendar');
-  const normalizeCalendar = 'events';
-  importedData = placeholders[`${normalizeCalendar}`].data;
-  console.log(importedData);
+  importedData = placeholders.calendarevents.data;
   createCalendar();
   const checkDivision = window.location.pathname.split('/');
   if (checkDivision[2] && checkDivision[2].length > 0) {
@@ -452,7 +399,7 @@ export default async function decorate(doc) {
   const calendarList = ul({ class: 'fc-calendar-list' });
   const normalizeCalendar = 'events';
   placeholders = await fetchPlaceholders(normalizeCalendar);
-  divisions = placeholders[divisions].data;
+  divisions = placeholders.divisions.data;
   divisions.forEach((division) => {
     const divisionLi = li({ class: 'fc-calendar-list-item', id: `${division.id}` });
     const divisionButton = a({ class: 'fc-calendar-list-button' });

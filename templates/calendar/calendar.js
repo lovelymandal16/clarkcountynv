@@ -204,23 +204,48 @@ function createEvents(eventsList) {
       } else {
         eventDuration = '01:00';
       }
-      calendar.addEvent({
-        title: event.title,
-        allDay: false,
-        rrule: {
-          freq: 'weekly',
-          byweekday: event.daysOfWeek.split(','),
-          dtstart: event.start,
-          until: event.end,
-        },
-        duration: eventDuration,
-        exdate: ['2025-01-10T13:00:00', '2025-01-17T13:00:00'],
-        url: event.url,
-        backgroundColor: event.backgroundColor,
-        classNames: event.classNames,
-        groupId: event.divisionid,
-        extendedProps: { readMore: event.readMore },
-      });
+      if (event.excludeDates && event.excludeDates.length > 0) {
+        const actualexcludeDates = [];
+        // event.excludeDates.split(',').foreach((date) => {
+        //   actualexcludeDates.push(`${date}T${event.startTime}`);
+        // });
+        event.excludeDates = event.excludeDates.split(',').map((date) => `${date}T${event.startTime}`);
+        console.log(event.excludeDates);
+        calendar.addEvent({
+          title: event.title,
+          allDay: false,
+          rrule: {
+            freq: 'weekly',
+            byweekday: event.daysOfWeek.split(','),
+            dtstart: event.start,
+            until: event.end,
+          },
+          duration: eventDuration,
+          exdate: event.excludeDates,
+          url: event.url,
+          backgroundColor: event.backgroundColor,
+          classNames: event.classNames,
+          groupId: event.divisionid,
+          extendedProps: { readMore: event.readMore },
+        });
+      } else {
+        calendar.addEvent({
+          title: event.title,
+          allDay: false,
+          rrule: {
+            freq: 'weekly',
+            byweekday: event.daysOfWeek.split(','),
+            dtstart: event.start,
+            until: event.end,
+          },
+          duration: eventDuration,
+          url: event.url,
+          backgroundColor: event.backgroundColor,
+          classNames: event.classNames,
+          groupId: event.divisionid,
+          extendedProps: { readMore: event.readMore },
+        });
+      }
     } else {
       calendar.addEvent({
         title: event.title,

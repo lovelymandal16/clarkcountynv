@@ -210,6 +210,26 @@
     
 /* stylelint-disable */
 @media (width <= 950px) {
+
+    .banner-carousel-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        
+    }
+    
+    .banner-carousel .carousel-slides-container {
+        position: relative;
+        height: 20rem;
+    }
+
+    .banner-carousel .carousel-slides {
+        display: flex;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+        overflow: hidden;
+    }
+
     .banner-carousel .carousel-slide {
         flex: 0 0 100%;
         scroll-snap-align: start;
@@ -219,11 +239,31 @@
         justify-content: center;
         position: relative;
         width: 100%;
-        min-height: min(45rem, calc(100svh - var(--nav-height)));
+        min-height: 30rem;
+        /* min-height: min(45rem, calc(100svh - var(--nav-height))); */
         min-width: 100%;
     }
 
-   
+    .banner-carousel .carousel-slide .carousel-slide-image picture > img {
+        height: 10%;
+        width: 100%;
+        object-fit: cover;
+        display: flex;
+        opacity: .99;
+        max-width: 100%;
+        max-height: 20%;
+        min-width: 100%;
+        min-height: 50%;
+        margin-left: 9%;
+        
+    }
+    
+    .banner-carousel-container {
+        position: relative;
+        width: 100%;
+        height: 500px;
+        
+    }
 
     .banner-carousel .carousel-navigation-buttons {
         position: absolute;
@@ -307,34 +347,26 @@
         background-color: white;
     }
 
-    .banner-carousel .carousel-slide .carousel-slide-image picture > img {
-        height: auto;
-        width: 100%;
-        object-fit: fill;
-        display: flex;
-        opacity: .99;
-        max-width: 100%;
-        max-height: 100%;
-        min-width: 100%;
-        min-height: 50%;
     
-    }
-    
-    .banner-carousel-container {
-        position: relative;
-        width: 100%;
-        height: 500px;
-        
-    }
-
     .banner-carousel .carousel-slide-indicators {
         display: flex;
         justify-content: center;
         gap: 0.75rem;
-        transform: translate(-0%, -400%);
-        top: -70px;
+        transform: translate(-0%, -325%);
+        top: -60px;
     }
 
+    .banner-title h3{
+        position: relative;
+        right: 0;
+        bottom: 280px;
+        font: 700 44px 'Open Sans', sans-serif;
+        color: #fff;
+        line-height: 1;
+        text-shadow: 0 2px 0.99px rgb(0 0 0 / 90%);
+        padding: 0 45px;
+        z-index: 5;
+    }
     
 
 } /* stylelint-enable */

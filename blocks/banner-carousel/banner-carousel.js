@@ -213,7 +213,6 @@ export default async function decorate(block) {
 
   const bannerTitleDiv = document.createElement('div');
   bannerTitleDiv.classList.add('banner-title');
-  bannerTitleDiv.classList.add('desktop');
   bannerTitleDiv.classList.add('short');
 
   bannerTitleDiv.innerHTML = `

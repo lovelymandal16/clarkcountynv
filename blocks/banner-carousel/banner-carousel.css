@@ -37,7 +37,7 @@
 
 .banner-carousel .carousel-slide .carousel-slide-image picture > img {
     height: 30rem;
-    object-fit: fill;
+    object-fit: cover;
     display: flex;
     opacity: .99;
     max-width: 150%;
@@ -357,16 +357,14 @@
     }
 
     .banner-title h3{
-        position: bottom;
-        right: 50px;
-        /* bottom: 50px; */
-        top: 50px;
-        font: 700 44px 'Open Sans', sans-serif;
+        position: relative;
+        right: 0;
+        bottom: 280px;
+        font: 700 40px 'Open Sans', sans-serif;
         color: #fff;
         line-height: 1;
         text-shadow: 0 2px 0.99px rgb(0 0 0 / 90%);
         padding: 0 45px;
-        z-index: 10;
     }
     
 

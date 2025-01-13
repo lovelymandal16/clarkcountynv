@@ -357,15 +357,16 @@
     }
 
     .banner-title h3{
-        position: relative;
-        right: 0;
-        bottom: 280px;
+        position: bottom;
+        right: 50px;
+        /* bottom: 50px; */
+        top: 50px;
         font: 700 44px 'Open Sans', sans-serif;
         color: #fff;
         line-height: 1;
         text-shadow: 0 2px 0.99px rgb(0 0 0 / 90%);
         padding: 0 45px;
-        z-index: 5;
+        z-index: 10;
     }
     
 

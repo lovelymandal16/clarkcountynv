@@ -396,6 +396,12 @@ function implementSearch(searchDiv) {
   });
 }
 
+const delay = async ($searchSection, $calendarSection, $main) => {
+  await loadrrule();
+  $main.appendChild($searchSection);
+  $main.append($calendarSection);
+};
+
 export default async function decorate(doc) {
   doc.body.classList.add('calendar');
   const $main = doc.querySelector('main');
@@ -433,11 +439,13 @@ export default async function decorate(doc) {
   calendarfilters.appendChild(calendarList);
   $searchSection.appendChild(calendarfilters);
   $searchSection.appendChild(bottomDiv);
+  //set timer of 3 seconds to load rrule
 
-  $main.appendChild($searchSection);
+  // $main.appendChild($searchSection);
   const calDiv = div({ id: 'calendar' });
   $calendarSection.append(calDiv);
-  $main.append($calendarSection);
+  // $main.append($calendarSection);
+  setTimeout(delay($searchSection, $calendarSection, $main), 3000);
   // loadrrule() is loaded after 3 seconds via the delayed.js script for improving page performance
   createModal(doc);
   calendarList.querySelectorAll('.fc-calendar-list-item').forEach((divisionLi, _, parent) => {

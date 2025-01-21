@@ -2,7 +2,8 @@
 const codeBasePath = `${window.hlx?.codeBasePath}/plugins/aem-assets-plugin`;
 
 // The blocks that are to be used from the aem-assets-plugin.
-const blocks = ['video', 'cards'];
+
+const blocks = ['video'];
 
 // Initialize the aem-assets-plugin.
 export default async function assetsInit() {

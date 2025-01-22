@@ -1,4 +1,7 @@
-- name: SendGrid
-  uses: peter-evans/sendgrid-action@v1
-  env:
-    SENDGRID_API_KEY: ABCD1234
+name: Email Testing Action
+on:
+jobs:
+  - name: SendGrid
+    uses: peter-evans/sendgrid-action@v1
+    env:
+      SENDGRID_API_KEY: ABCD1234

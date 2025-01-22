@@ -6,27 +6,14 @@ import {
 export default function decorate(block) {
   /* change to ul, li */
   const $ul = ul();
-  let cardImage;
   [...block.children].forEach((row) => {
-    [...row.children].forEach((col, index) => {
-      if (index === 0) {
-        const imageLinkEl = col.querySelector('a');
-        if (imageLinkEl) {
-          const imgSrc = imageLinkEl.getAttribute('href');
-          cardImage = createOptimizedPicture(imgSrc, imgSrc.split('/').pop());
-          col.replaceWith(cardImage);
-        } else {
-          cardImage = col.querySelector('picture');
-        }
-      }
-    });
     if (block.classList.contains('clickable') || block.classList.contains('clickable-images')) {
       const $li = li();
       const aEle = a();
       aEle.append($li);
       while (row.firstElementChild) $li.append(row.firstElementChild);
       [...$li.children].forEach((divEl) => {
-        if (divEl.children.length === 1 && cardImage && block.classList.contains('clickable')) divEl.className = 'cards-card-image';
+        if (divEl.children.length === 1 && divEl.querySelector('picture')) divEl.className = 'cards-card-image';
         else {
           divEl.className = 'cards-card-body';
           if (divEl.querySelector('a')) {

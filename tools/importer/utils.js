@@ -125,11 +125,12 @@ export const fetchAndParseDocument = async (url) => {
  * @param assetPath = sub directory to store assets -
  * Ex. "governement/department", "residents", "residents/dir1"
  */
-export const fixPdfLinks = (main, results, pagePath, assetPath = 'general') => {
+export const fixPdfLinks = (main, results, pagePath, assetPath = 'general', shouldCheckTextIsLink = 'false') => {
   if (!main) {
     return;
   }
-  const EXCLUDE_EXTENSIONS = ['php', 'gov', 'org'];
+  const EXCLUDE_EXTENSIONS = ['gov', 'org'];
+  const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
 
   main.querySelectorAll('a').forEach((a) => {
     let href = a.getAttribute('href')?.replace('gov//', 'gov/');
@@ -156,14 +157,30 @@ export const fixPdfLinks = (main, results, pagePath, assetPath = 'general') => {
           from: originalLocation.toString(),
         });
         a.setAttribute('href', new URL(newPath, PREVIEW_DOMAIN).toString());
+      } else if (IMAGE_EXTENSIONS.includes(extension)) {
+        const { children } = a;
+        // if children contains an image, then check if a.href and img.src are same
+        if (children.length === 1 && children[0].tagName === 'IMG') {
+          const img = children[0];
+          if (img.getAttribute('src') === a.getAttribute('href')) {
+            const newSrcPath = fixImageSrcPath(url.pathname, results, assetPath);
+            a.setAttribute('href', newSrcPath);
+          }
+        }
       } else if (!EXCLUDE_EXTENSIONS.includes(extension)) {
-        console.log(`File with extension - ${extension} found. Skipping import`);
+        /* console.log(`File with extension - ${extension} found. Skipping import`);
         results.push({
           path: pagePath,
           report: {
             unknown: url.toString(),
           },
-        });
+        }); */
+      } else {
+        const link = getSanitizedPath(url.pathname);
+        if (shouldCheckTextIsLink && a.textContent.trim().search(href) !== -1) {
+          a.innerText = new URL(link, PREVIEW_DOMAIN).toString();
+        }
+        a.setAttribute('href', new URL(link, PREVIEW_DOMAIN).toString());
       }
     }
   });

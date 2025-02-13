@@ -486,6 +486,54 @@ function printBreadcrumbUrl(main, results, newPath, pageTitle, params) {
   }
 }
 
+function buildClickableImagesCards(main) {
+  const clickableImages = main.querySelectorAll('div a > img');
+
+  for (let i = 0; i < clickableImages.length;) {
+    const cells = [];
+    const clickableImage = clickableImages[i];
+    const clickableAnchor = clickableImage.parentElement;
+    console.log(clickableAnchor.href, '-', clickableImage.src);
+    let link1 = document.createElement('a');
+    link1.setAttribute('href', clickableAnchor.href);
+    link1.innerText = clickableAnchor.href;
+    let link2 = document.createElement('a');
+    link2.setAttribute('href', clickableImage.src);
+    link2.innerText = clickableImage.src;
+
+    cells.push([link1, link2]);
+    i += 1;
+
+    // continue until all the sibling clickableImage are printed.
+    // find all sibling anchor tags of clickableImage and do the same as above
+    let sibling = clickableAnchor.nextElementSibling;
+    while (sibling) {
+      if (sibling.tagName.toLowerCase() === 'a') {
+        i += 1;
+        const siblingImg = sibling.querySelector('img');
+        if (siblingImg) {
+          console.log(sibling.href, '-', siblingImg.src);
+          link1 = document.createElement('a');
+          link1.setAttribute('href', sibling.href);
+          link1.innerText = sibling.href;
+          link2 = document.createElement('a');
+          link2.setAttribute('href', siblingImg.src);
+          link2.innerText = siblingImg.src;
+          cells.push([link1, link2]);
+        }
+      }
+      sibling = sibling.nextElementSibling;
+    }
+
+    const block = WebImporter.Blocks.createBlock(document, {
+      name: 'cards (clickable-images)',
+      cells: [...cells],
+    });
+
+    clickableAnchor.closest('div').insertBefore(block, clickableAnchor.closest('div').firstChild);
+  }
+}
+
 export default {
 
   transform: async ({
@@ -529,10 +577,10 @@ export default {
       assetsPath = '';
     }
 
-    fixPdfLinks(main, results, newPagePath, assetsPath);
-    fixPdfLinks(leftNavAsideEl, results, newPagePath, assetsPath);
-    fixLinks(main, true);
-    fixLinks(leftNavAsideEl, false);
+    fixPdfLinks(main, results, newPagePath, assetsPath, true);
+    fixPdfLinks(leftNavAsideEl, results, newPagePath, assetsPath, false);
+    // fixLinks(main, true);
+    // fixLinks(leftNavAsideEl, false);
     fixImageLinks(main, results, assetsPath);
 
     setPageTitle(main, params);
@@ -588,6 +636,7 @@ export default {
     buildCardsTilesBlock(main, results, assetsPath);
     buildAgendaTable(main);
     buildTables(main);
+    buildClickableImagesCards(main);
 
     const doc = await fetchAndParseDocument(url);
     let contactsDiv;

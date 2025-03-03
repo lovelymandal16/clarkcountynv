@@ -14,6 +14,10 @@ body.calendar div.event-modal a:any-link {
     color: white;
 }
 
+body.calendar .hidden {
+    display: none;
+}
+
 body.calendar .off {
     opacity: 0;
 }

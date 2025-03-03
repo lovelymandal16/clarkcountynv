@@ -572,6 +572,13 @@ function changeURL() {
 export default async function decorate(doc) {
   changeURL();
   doc.body.classList.add('calendar');
+
+  // Remove header & footer for individual calendar pages
+  if (doc.querySelector('.section.search.individual')) {
+    doc.querySelector('header').classList.add('hidden');
+    doc.querySelector('footer').classList.add('hidden');
+  }
+
   const $main = doc.querySelector('main');
   const $searchSection = section({ class: 'fc-search' });
   const $calendarSection = section();

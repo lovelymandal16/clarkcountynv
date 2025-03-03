@@ -97,6 +97,10 @@ main .mainmenu .leftsection > .default-content-wrapper:has(p.active) + .accordio
     transition: height .5s ease-in;
 }
 
+main .mainmenu .rightsection.calendar .embed iframe {
+    height: 1000px !important;
+}
+
 @media (width >=900px) {
     main .rightsection {
         padding: 50px 50px 60px;

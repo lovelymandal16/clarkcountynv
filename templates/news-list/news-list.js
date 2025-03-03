@@ -20,7 +20,7 @@ export default async function decorate(doc) {
       a({ href: article.path },
         // eslint-disable-next-line indent, function-paren-newline
         h3(article.title)),
-      p(article.description),
+      p(article.brief),
     );
 
   const newsTitle = 'News';
@@ -33,7 +33,6 @@ export default async function decorate(doc) {
 
   $page.append($newsPage);
 
-  // TODO: add proper location for query index
   await new ArticleList({
     jsonPath: '/news/query-index.json',
     articleContainer: $articles,

@@ -102,7 +102,7 @@ export default function decorate(block) {
           a(
             { href: pageLink || '', class: 'tile-detail', style: pageLink ? '' : 'pointer-events: none;' },
             div({ class: 'staff-tile-img-box' }, img({ src: imgSrc, alt: altText || '' })),
-            h4({ class: 'staff-tile-name' }, `${name.split('-')[0]} - `, br(), name.split('-')[1]),
+            h4({ class: 'staff-tile-name' }, `${name.split('-')[0]}`, br(), name.split('-')[1]),
             div({ class: 'staff-tile-title' }, title),
           ),
           div(

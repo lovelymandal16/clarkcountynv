@@ -280,21 +280,20 @@ main .mainmenu .rightsection .table.no-header.cards.withimages.height-300 table 
     }
 }
 
-.table.red-orange {
+/* table orange with white text header */
+.table.red-orange-header {
     table {
-        background-color: #c54b2a;
         border-color: gray;
-
-        tbody tr {
-            &:nth-child(odd) {
-                background: white;
-            }
-
-            td, th {
-                border: 1px solid gray;                
-            }
+        
+        th {
+            background-color: #c54b2a;
+            color: white;
         }
-    }    
+
+        td, th {
+            border: 1px solid gray;
+        }
+    }
 }
 
 .table.agenda {

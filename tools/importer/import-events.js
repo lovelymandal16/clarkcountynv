@@ -161,7 +161,7 @@ export default {
     const pathPrefix = WebImporter.FileUtils.sanitizePath(
       BASE_PATH + eventJson.primary_calendar_name,
     );
-    const newPagePath = `${pathPrefix}/${WebImporter.FileUtils.sanitizeFilename(eventJson.title.toLowerCase())}`;// '/' + eventJson.title.toLowerCase().replace(/ /g, '-');
+    const newPagePath = `${pathPrefix}/${WebImporter.FileUtils.sanitizeFilename(`${eventJson.title.toLowerCase()}-${eventJson.start.toLowerCase()}`)}`;
 
     const main = document.createElement('body');
 

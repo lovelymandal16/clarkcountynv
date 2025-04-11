@@ -82,6 +82,46 @@ function getNewImageLink(imageSrc, pathPrefix, results) {
   return new URL(newPath, PREVIEW_DOMAIN).toString();
 }
 
+function colorToDivisionMapping(color) {
+  const colorMapping = {
+    '#312222': 'Events',
+    '#da80c1': 'County Commission District A',
+    '#c0a6dd': 'County Commission District B',
+    '#48e7e2': 'County Commissioners District C',
+    '#7ad295': 'County Commissioners District D',
+    '#d4dbb6': 'County Commissioners District E',
+    '#f9a97f': 'County Commissioners District F',
+    '#2619e4': 'County Commissioners District G',
+    '#ff8600': 'Goodsprings Citizens Advisory Committee',
+    '#37d84e': 'Laughlin TAB',
+    '#7237d8': 'Lone Mountain Citizens Advisory Council',
+    '#d837d2': 'Lower Kyle Canyon Citizens Advisory Committee',
+    '#9d484d': 'Moapa Town Advisory Board',
+    '#058089': 'Paradise Town Advisory Board',
+    '#3a9500': 'Spring Valley Town Advisory Board',
+    '#3c8c98': 'Winchester Town Advisory Board',
+    '#d5cd70': 'Enterprise Town Advisory Board',
+    '#89b5bc': 'Moapa Valley Town Advisory Board',
+    '#fe0000': 'Red Rock Citizens Advisory Committee',
+    '#37d891': 'Searchlight Town Advisory Board',
+    '#b4ada6': 'Bunkerville Town Advisory Board',
+    '#f3bbea': 'Mount Charleston Town Advisory Board',
+    '#dadd32': 'Sunrise Manor Town Advisory Board',
+    '#07caf7': 'Whitney Town Advisory Board',
+    '#047c6d': 'C',
+    '#9086d8': 'BCC',
+    '#6aa85a': 'Mountain Springs Citizens Advisory Council',
+    '#069874': 'Indian Springs Town Advisory Board',
+    '#51277c': 'Sandy Valley Citizens Advisory Council Meeting',
+    '#edf77f': 'County Manager',
+    '#ddc08f': 'Parks and Recreation',
+    '#37d847': 'Truancy Prevention Outreach Program',
+    '#f26d1e': 'Mojave Max and DCP Outreach Events / Volunteer Opportunities',
+  };
+
+  return colorMapping[color] || '';
+}
+
 const calendarProps = {
   1: { color: '#312222', name: 'Events' },
   6: { color: '#3787D8', name: 'County Commissioners' },
@@ -153,7 +193,7 @@ export default {
 
     try {
       // Using relative path since events.json is in the same directory
-      const eventsJsonPath = new URL('./all_filtered_events.json', import.meta.url);
+      const eventsJsonPath = new URL('./events.json', import.meta.url);
       const response = await fetch(eventsJsonPath);
       eventsJsonData = await response.json();
     } catch (error) {
@@ -166,7 +206,7 @@ export default {
     const pathPrefix = WebImporter.FileUtils.sanitizePath(
       BASE_PATH + eventJson.primary_calendar_name,
     );
-    const newPagePath = `${pathPrefix}/${WebImporter.FileUtils.sanitizeFilename(`${eventJson.title.toLowerCase()}-${eventJson.start.toLowerCase()}`)}`;
+    const newPagePath = `${pathPrefix}/${WebImporter.FileUtils.sanitizeFilename(eventJson.title.toLowerCase())}`;// '/' + eventJson.title.toLowerCase().replace(/ /g, '-');
 
     const main = document.createElement('body');
 
@@ -247,7 +287,8 @@ export default {
     main.append(blockSeparator().cloneNode(true));
 
     // calenders display
-    params.divisionName = calendarProps[eventJson.calendar_displays[0]]?.name;
+    params.divisionName = colorToDivisionMapping(eventJson.color)
+      || eventJson.primary_calendar_name;
     if (eventJson.calendar_displays && eventJson.calendar_displays.length > 1) {
       const eventDivisions = eventJson.calendar_displays;
       const names = eventDivisions
@@ -258,6 +299,9 @@ export default {
     }
 
     params.eventStart = eventJson.start;
+    if (eventJson.end) {
+      params.eventStop = eventJson.end;
+    }
     params.duration = eventJson.duration ? `T${eventJson.duration}:00` : '';
     if (eventJson.rrule) {
       const rrule = parseRRule(eventJson.rrule);
@@ -265,14 +309,12 @@ export default {
       params.daysOfWeek = rrule.daysOfWeek;
       params.excludeDates = rrule.excludeDates;
       if (rrule.until) {
-        params.eventStop = rrule.until || ''; // Ideally we should support until in rrule
+        params.eventStop = rrule.until; // Ideally we should support until in rrule
       } /* else {
         const startDate = new Date(params.eventStart);
         startDate.setFullYear(startDate.getFullYear() + 5);
         params.eventStop = startDate.toISOString().substring(0, 19);
       } */
-    } else if (eventJson.end) {
-      params.eventStop = eventJson.end;
     }
     if (!params.eventStop && params.allDay) {
       console.log('Not setting eventStop for single allDay event');

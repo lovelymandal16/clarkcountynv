@@ -238,6 +238,7 @@ function createEvents(eventsList) {
   disableSpinner();
   let eventDuration = '';
   eventsList.forEach((event) => {
+    let eventbyweekday = [];
     event.allDay = event.allDay === 'true';
     if (event.daysOfWeek.length > 1) {
       if (event.duration && event.duration.length > 0) {
@@ -249,7 +250,13 @@ function createEvents(eventsList) {
         if (typeof event.excludeDates === 'string') {
           event.excludeDates = event.excludeDates.split(',').map((date) => `${date}T${event.startTime}`).filter((content) => content.includes('-'));
         }
-        const eventbyweekday = getbyweekday(event.daysOfWeek);
+        eventbyweekday = getbyweekday(event.daysOfWeek);
+        if (event.freq.toLowerCase() === 'daily') {
+          // eslint-disable-next-line max-len
+          eventbyweekday.push(rrule.RRule.MO, rrule.RRule.TU, rrule.RRule.WE, rrule.RRule.TH, rrule.RRule.FR, rrule.RRule.SA, rrule.RRule.SU);
+        } else {
+          eventbyweekday = getbyweekday(event.daysOfWeek);
+        }
         /* Converting String into array to leverage map function */
         calendar.addEvent({
           title: event.title,
@@ -272,7 +279,7 @@ function createEvents(eventsList) {
           id: `${event.divisionid}-${event.title.length}${event.start.length}`,
         });
       } else {
-        const eventbyweekday = getbyweekday(event.daysOfWeek);
+        eventbyweekday = getbyweekday(event.daysOfWeek);
         calendar.addEvent({
           title: event.title,
           allDay: event.allDay,

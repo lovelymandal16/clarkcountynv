@@ -1,4 +1,3 @@
-/* global rrule */
 import {
   div, iframe, section, p, button, a, ul, li,
 } from '../../scripts/dom-helpers.js';
@@ -215,30 +214,25 @@ async function changehref() {
 }
 
 function getbyweekday(daysOfWeek) {
-  return daysOfWeek.split(',').map((item) => {
-    const match = item.match(/^([a-z]{2})\((-?\d+)\)$/i); // match like mo(1), mo(-1)
-    if (match) {
-      const day = match[1].toUpperCase(); // e.g., "MO"
-      const nth = parseInt(match[2], 10); // e.g., 1 or -1
-      if (rrule.RRule[day]) {
-        return rrule.RRule[day].nth(nth);
-      }
-    } else {
-      // Handle simple "mo" case (no parentheses)
-      const day = item.toUpperCase();
-      if (rrule.RRule[day]) {
-        return rrule.RRule[day];
+  const arraydays = [];
+  daysOfWeek.split(',').forEach((ele) => {
+    if (ele.length > 1) {
+      if (ele.includes('(')) {
+        const day = ele.split('(')[0].toUpperCase();
+        const within = ele.split('(')[1].split(')')[0];
+        arraydays.push(`${day}#${within}`);
+      } else {
+        arraydays.push(ele.toUpperCase());
       }
     }
-    return null;
-  }).filter(Boolean);
+  });
+  return arraydays;
 }
 
 function createEvents(eventsList) {
   disableSpinner();
   let eventDuration = '';
   eventsList.forEach((event) => {
-    let eventbyweekday = [];
     event.allDay = event.allDay === 'true';
     if (event.daysOfWeek.length > 1) {
       if (event.duration && event.duration.length > 0) {
@@ -250,20 +244,21 @@ function createEvents(eventsList) {
         if (typeof event.excludeDates === 'string') {
           event.excludeDates = event.excludeDates.split(',').map((date) => `${date}T${event.startTime}`).filter((content) => content.includes('-'));
         }
-        eventbyweekday = getbyweekday(event.daysOfWeek);
-        if (event.freq.toLowerCase() === 'daily') {
-          // eslint-disable-next-line max-len
-          eventbyweekday.push(rrule.RRule.MO, rrule.RRule.TU, rrule.RRule.WE, rrule.RRule.TH, rrule.RRule.FR, rrule.RRule.SA, rrule.RRule.SU);
-        } else {
-          eventbyweekday = getbyweekday(event.daysOfWeek);
-        }
+        const eventbyweekday = getbyweekday(event.daysOfWeek);
         /* Converting String into array to leverage map function */
         calendar.addEvent({
           title: event.title,
           allDay: event.allDay,
           rrule: {
             freq: event.freq,
-            byweekday: eventbyweekday,
+            byweekday: eventbyweekday.map((day) => {
+              if (day.includes('#')) {
+                // eslint-disable-next-line no-undef
+                return rrule.RRule[day.split('#')[0]].nth(day.split('#')[1]);
+              }
+              // eslint-disable-next-line no-undef
+              return rrule.RRule[day];
+            }),
             dtstart: event.start,
             until: event.end,
           },
@@ -279,13 +274,20 @@ function createEvents(eventsList) {
           id: `${event.divisionid}-${event.title.length}${event.start.length}`,
         });
       } else {
-        eventbyweekday = getbyweekday(event.daysOfWeek);
+        const eventbyweekday = getbyweekday(event.daysOfWeek);
         calendar.addEvent({
           title: event.title,
           allDay: event.allDay,
           rrule: {
             freq: event.freq,
-            byweekday: eventbyweekday,
+            byweekday: eventbyweekday.map((day) => {
+              if (day.includes('#')) {
+                // eslint-disable-next-line no-undef
+                return rrule.RRule[day.split('#')[0]].nth(day.split('#')[1]);
+              }
+              // eslint-disable-next-line no-undef
+              return rrule.RRule[day];
+            }),
             dtstart: event.start,
             until: event.end,
           },
@@ -530,7 +532,7 @@ async function initializeCalendar() {
           } else {
             // eslint-disable-next-line max-len
             const filterData = importedData.filter((event) => normalizeString(event.divisionname).includes(normalizeString(division.name))).map((event) => {
-              [event.divisionname] = event.divisionname.split(',');
+              event.divisionname = division.name;
               return event;
             });
             createEventList(filterData, eventsList);

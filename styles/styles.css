@@ -453,14 +453,6 @@ body > main > div.section.updates.section-top-container.column-container.cards-c
   margin: 0 auto;
 }
 
-/* section metadata */
-main .section.light,
-main .section.highlight {
-  background-color: var(--light-color);
-}
-
-
-
 main .section.details-404 > .default-content-wrapper {
   height: 350px;
   text-align: center;

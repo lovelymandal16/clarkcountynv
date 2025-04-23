@@ -888,6 +888,18 @@
             "name": "default",
             "label": "Default Value",
             "valueType": "string"
+          },
+          {
+            "component": "boolean",
+            "name": "enableOtherValue",
+            "label": "Enable additional custom value.",
+            "valueType": "boolean"
+          },
+          {
+            "component": "text",
+            "name": "otherValue",
+            "label": "Other Value",
+            "valueType": "string"
           }
         ]
       },

@@ -676,6 +676,18 @@
                 "value": "vertical"
               }
             ]
+          },
+          {
+            "component": "boolean",
+            "name": "enableOtherValue",
+            "label": "Enable additional custom value.",
+            "valueType": "boolean"
+          },
+          {
+            "component": "text",
+            "name": "otherValue",
+            "label": "Other Value",
+            "valueType": "string"
           }
         ]
       },
@@ -3808,6 +3820,13 @@
             "name": "tooltip",
             "label": "Short description",
             "valueType": "string"
+          },
+          {
+            "component": "text",
+            "name": "tooltipText",
+            "label": "Tooltip",
+            "valueType": "string",
+            "description": "Text to show as a tooltip."
           }
         ]
       },

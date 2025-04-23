@@ -83,6 +83,15 @@ export function createLabel(fd, tagName = 'label') {
       tooltipContent.textContent = stripTags(fd.tooltip, '');
       label.appendChild(tooltipContent);
     }
+
+    if (fd.properties.tooltipText) {
+      label.classList.add('has-visible-tooltip');
+
+      const tooltipContent = document.createElement('span');
+      tooltipContent.className = 'tooltip-content';
+      tooltipContent.textContent = stripTags(fd.properties.tooltipText, '');
+      label.appendChild(tooltipContent);
+    }
     return label;
   }
   return null;
